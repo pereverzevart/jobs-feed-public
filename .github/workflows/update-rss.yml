@@ -25,7 +25,7 @@ jobs:
       - name: Fetch script
         run: |
           mkdir -p scripts
-          curl -L "https://raw.githubusercontent.com/pereverzevart/financeanalitics/main/scripts/telegram_public_to_rss.py" -o scripts/telegram_public_to_rss.py
+          curl -fL "https://raw.githubusercontent.com/pereverzevart/financeanalitics/main/scripts/telegram_public_to_rss.py" -o scripts/telegram_public_to_rss.py
 
       - name: Generate main feed (3 days)
         run: |
