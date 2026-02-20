@@ -2,8 +2,7 @@ name: Update Telegram Jobs RSS
 
 on:
   schedule:
-    # 12:00 и 19:00 МСК = 09:00 и 16:00 UTC
-    - cron: "0 9,16 * * *"
+    - cron: "0 9,16 * * *" # 12:00 и 19:00 МСК
   workflow_dispatch:
 
 permissions:
@@ -12,7 +11,6 @@ permissions:
 jobs:
   update-rss:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,11 +19,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      - name: Fetch script
-        run: |
-          mkdir -p scripts
-          curl -fL "https://raw.githubusercontent.com/pereverzevart/financeanalitics/main/scripts/telegram_public_to_rss.py" -o scripts/telegram_public_to_rss.py
 
       - name: Generate main feed (3 days)
         run: |
