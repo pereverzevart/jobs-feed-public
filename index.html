@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Telegram Jobs Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f8f3;
+      --card: #ffffff;
+      --ink: #1c1f22;
+      --muted: #5f6770;
+      --brand: #0d7f5f;
+      --brand-2: #ffd166;
+      --line: #d7ddd5;
+      --shadow: 0 8px 24px rgba(13, 20, 28, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #dff7e7 0, transparent 60%),
+        radial-gradient(900px 500px at 90% -20%, #fff0c2 0, transparent 55%),
+        var(--bg);
+    }
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 28px 18px 48px; }
+    .hero {
+      background: linear-gradient(135deg, #0f5f4a, #14805f);
+      color: #fff;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    .hero h1 {
+      margin: 0 0 10px;
+      font-family: "Manrope", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+    }
+    .meta { opacity: 0.9; font-size: 0.95rem; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0 18px;
+    }
+    .tab {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .tab:hover { transform: translateY(-1px); }
+    .tab.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid #e7ece7;
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eaf7f1;
+      color: #0c6e52;
+    }
+    .title {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+    .desc {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+    .desc.collapsed {
+      max-height: 11.5em;
+      overflow: hidden;
+      position: relative;
+    }
+    .desc.collapsed::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2.8em;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), var(--card));
+      pointer-events: none;
+    }
+    .more-btn {
+      border: 0;
+      background: transparent;
+      color: var(--brand);
+      padding: 0;
+      margin-top: 2px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      font-size: .9rem;
+    }
+    .desc-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .desc-line {
+      margin: 0;
+    }
+    .desc-line.key {
+      font-weight: 700;
+      color: #2d3641;
+    }
+    .desc-line.contact {
+      font-weight: 600;
+      color: #0c6e52;
+    }
+    .foot { margin-top: auto; color: var(--muted); font-size: .82rem; display: flex; justify-content: space-between; gap: 8px; }
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      color: var(--muted);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Вакансии из Telegram</h1>
+      <div class="meta" id="meta">Загрузка...</div>
+    </section>
+
+    <div class="tabs" id="tabs"></div>
+    <div id="content"></div>
+  </div>
+
+  <script>
+    // If files are in same folder on GitHub Pages, keep BASE_URL = "."
+    const BASE_URL = ".";
+    const FEEDS = {
+      all: `${BASE_URL}/telegram_jobs_feed.xml`,
+      content: `${BASE_URL}/telegram_jobs_content.xml`,
+      design: `${BASE_URL}/telegram_jobs_design.xml`,
+      marketing: `${BASE_URL}/telegram_jobs_marketing.xml`,
+      crypto: `${BASE_URL}/telegram_jobs_crypto.xml`,
+      salary100k: `${BASE_URL}/telegram_jobs_100k.xml`
+    };
+    const TAB_LABELS = {
+      all: "Все",
+      content: "Контент",
+      design: "Дизайн",
+      marketing: "Маркетинг",
+      crypto: "Крипто/Форекс/Арбитраж",
+      salary100k: "ЗП 100k+"
+    };
+
+    let currentTab = "all";
+    const cache = {};
+
+    function parseRss(xmlText) {
+      const doc = new DOMParser().parseFromString(xmlText, "text/xml");
+      const items = [...doc.querySelectorAll("item")].map((item) => {
+        const title = item.querySelector("title")?.textContent?.trim() || "Без названия";
+        const description = item.querySelector("description")?.textContent?.trim() || "";
+        const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
+        const category = item.querySelector("category")?.textContent?.trim() || "other";
+        const [channel] = title.split("|").map((s) => s.trim());
+        return { title, description, pubDate, category, channel };
+      });
+
+      const dedup = new Map();
+      for (const it of items) {
+        const key = `${it.title}|${it.pubDate}|${it.description}`;
+        if (!dedup.has(key)) dedup.set(key, it);
+      }
+      return [...dedup.values()];
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "";
+      const date = new Date(dateStr);
+      return date.toLocaleString("ru-RU", {
+        timeZone: "Europe/Moscow",
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }) + " МСК";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function normalizeVacancyText(raw) {
+      let text = String(raw || "").replace(/\s+/g, " ").trim();
+      text = text.replace(/\s*[•▪●]\s*/g, "\n• ");
+      text = text.replace(/\s+([0-9]{1,2})\.\s+/g, "\n$1. ");
+      text = text.replace(/\s*📝\s*/g, "\nКонтакт: ");
+      text = text.replace(
+        /\s*(Требования:|Условия:|Обязанности:|Что делать:|Что предстоит делать:|Формат:|Оплата:|Контакты:)\s*/gi,
+        "\n$1 "
+      );
+      return text.trim();
+    }
+
+    function formatDescription(raw) {
+      const normalized = normalizeVacancyText(raw);
+      const lines = normalized.split(/\n+/).map((s) => s.trim()).filter(Boolean);
+      if (!lines.length) return "";
+      const htmlLines = lines.map((line) => {
+        const safe = escapeHtml(line);
+        const cls =
+          /^(Контакт:|Контакты:|@|https?:\/\/)/i.test(line) ? "desc-line contact" :
+          /^(Требования:|Условия:|Обязанности:|Что делать:|Что предстоит делать:|Формат:|Оплата:)/i.test(line) ? "desc-line key" :
+          "desc-line";
+        return `<p class="${cls}">${safe}</p>`;
+      }).join("");
+      return `<div class="desc-lines">${htmlLines}</div>`;
+    }
+
+    async function fetchFeed(tab) {
+      if (cache[tab]) return cache[tab];
+      const res = await fetch(FEEDS[tab], { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const xmlText = await res.text();
+      const items = parseRss(xmlText);
+      cache[tab] = items;
+      return items;
+    }
+
+    function renderTabs() {
+      const tabs = document.getElementById("tabs");
+      tabs.innerHTML = "";
+      Object.keys(FEEDS).forEach((key) => {
+        const btn = document.createElement("button");
+        btn.className = `tab ${key === currentTab ? "active" : ""}`;
+        btn.textContent = TAB_LABELS[key];
+        btn.onclick = () => {
+          currentTab = key;
+          renderTabs();
+          render();
+        };
+        tabs.appendChild(btn);
+      });
+    }
+
+    function renderItems(items) {
+      const root = document.getElementById("content");
+      if (!items.length) {
+        root.innerHTML = `<div class="empty">На текущий момент вакансий в этой категории нет.</div>`;
+        return;
+      }
+
+      const cards = items.map((it) => `
+        <article class="card">
+          <span class="badge">${escapeHtml(it.category)}</span>
+          <h3 class="title">${escapeHtml(it.title)}</h3>
+          <div class="desc collapsed">${formatDescription(it.description)}</div>
+          <button class="more-btn" type="button">Показать полностью</button>
+          <div class="foot">
+            <span>${escapeHtml(it.channel || "канал")}</span>
+            <span>${formatDate(it.pubDate)}</span>
+          </div>
+        </article>
+      `).join("");
+
+      root.innerHTML = `<section class="grid">${cards}</section>`;
+
+      root.querySelectorAll(".card").forEach((card) => {
+        const desc = card.querySelector(".desc");
+        const btn = card.querySelector(".more-btn");
+        if (!desc || !btn) return;
+
+        // Hide toggle if text is short and does not overflow.
+        if (desc.scrollHeight <= desc.clientHeight + 2) {
+          btn.style.display = "none";
+          return;
+        }
+
+        btn.addEventListener("click", () => {
+          const isCollapsed = desc.classList.toggle("collapsed");
+          btn.textContent = isCollapsed ? "Показать полностью" : "Свернуть";
+        });
+      });
+    }
+
+    async function render() {
+      try {
+        const items = await fetchFeed(currentTab);
+        const meta = document.getElementById("meta");
+        meta.textContent = `Источник: GitHub Pages RSS | записей: ${items.length} | обновлено: ${new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" })} МСК`;
+        renderItems(items);
+      } catch (err) {
+        document.getElementById("content").innerHTML = `<div class="empty">Ошибка загрузки RSS: ${err.message}</div>`;
+      }
+    }
+
+    renderTabs();
+    render();
+  </script>
+</body>
+</html>
