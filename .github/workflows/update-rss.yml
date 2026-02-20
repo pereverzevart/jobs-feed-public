@@ -1,0 +1,77 @@
+name: Update Telegram Jobs RSS
+
+on:
+  schedule:
+    # 12:00 и 19:00 МСК = 09:00 и 16:00 UTC
+    - cron: "0 9,16 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-rss:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Fetch script
+        run: |
+          mkdir -p scripts
+          curl -L "https://raw.githubusercontent.com/pereverzevart/financeanalitics/main/scripts/telegram_public_to_rss.py" -o scripts/telegram_public_to_rss.py
+
+      - name: Generate main feed (3 days)
+        run: |
+          python scripts/telegram_public_to_rss.py \
+            --channels @rueventjob @rabotavakansij @bizneschats @mskeventjob @spbeventjob @udafrii \
+            --keywords "требуется" "ищем" "вакансия" "копирайтер" "smm" "pr" "seo" "дизайнер" \
+            --pages-per-channel 8 \
+            --max-items 250 \
+            --since-days 3 \
+            --feed-title "Telegram Jobs Feed" \
+            --feed-link "https://github.com/pereverzevart/jobs-feed-public" \
+            --feed-description "Вакансии за последние 3 дня из Telegram" \
+            --output "telegram_jobs_feed.xml" \
+            --category-output-dir "."
+
+      - name: Generate crypto feed (3 days)
+        run: |
+          python scripts/telegram_public_to_rss.py \
+            --channels @cryptoweb3work @workingincrypto @hr_affiliate @cpaSearch_Resume \
+            --keywords "требуется" "ищем" "вакансия" "копирайтер" "smm" "pr" "seo" "дизайнер" \
+            --pages-per-channel 8 \
+            --max-items 120 \
+            --since-days 3 \
+            --feed-title "Telegram Jobs Feed Crypto" \
+            --feed-link "https://github.com/pereverzevart/jobs-feed-public" \
+            --feed-description "Крипто/форекс/арбитраж вакансии за последние 3 дня" \
+            --output "telegram_jobs_crypto.xml"
+
+      - name: Generate 100k+ feed (3 days)
+        run: |
+          python scripts/telegram_public_to_rss.py \
+            --channels @theypaywell \
+            --keywords "требуется" "ищем" "вакансия" "копирайтер" "smm" "pr" "seo" "дизайнер" \
+            --pages-per-channel 8 \
+            --max-items 120 \
+            --since-days 3 \
+            --min-salary-rub 100000 \
+            --feed-title "Telegram Jobs Feed 100k+" \
+            --feed-link "https://github.com/pereverzevart/jobs-feed-public" \
+            --feed-description "Вакансии с зарплатой от 100 000 ₽ за последние 3 дня" \
+            --output "telegram_jobs_100k.xml"
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add telegram_jobs_feed.xml telegram_jobs_content.xml telegram_jobs_design.xml telegram_jobs_marketing.xml telegram_jobs_other.xml telegram_jobs_crypto.xml telegram_jobs_100k.xml
+          git diff --cached --quiet || git commit -m "chore: update RSS feeds"
+          git push
