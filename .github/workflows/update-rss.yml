@@ -11,9 +11,12 @@ permissions:
 jobs:
   update-rss:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -61,10 +64,25 @@ jobs:
             --feed-description "Вакансии с зарплатой от 100 000 ₽ за последние 3 дня" \
             --output "telegram_jobs_100k.xml"
 
+      - name: Rewrite feeds (OpenRouter)
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ secrets.OPENROUTER_MODEL }}
+        run: |
+          python scripts/rewrite_feed.py
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add telegram_jobs_feed.xml telegram_jobs_content.xml telegram_jobs_design.xml telegram_jobs_marketing.xml telegram_jobs_other.xml telegram_jobs_crypto.xml telegram_jobs_100k.xml
-          git diff --cached --quiet || git commit -m "chore: update RSS feeds"
-          git push
+
+          git add telegram_jobs_feed.xml telegram_jobs_content.xml telegram_jobs_design.xml telegram_jobs_marketing.xml telegram_jobs_other.xml telegram_jobs_crypto.xml telegram_jobs_100k.xml .rewrite_state.json
+
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: update RSS feeds"
+
+          # avoid race when main moved during workflow run
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin main && break
+            sleep 3
+          done
