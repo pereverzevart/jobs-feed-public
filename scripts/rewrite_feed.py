@@ -8,7 +8,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
+API_KEY = re.sub(r"\s+", "", os.getenv("OPENROUTER_API_KEY", ""))
 MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini").strip()
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 STATE_FILE = Path(".rewrite_state.json")
