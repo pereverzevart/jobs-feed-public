@@ -5,6 +5,10 @@ on:
     - cron: "0 9,16 * * *" # 12:00 и 19:00 МСК
   workflow_dispatch:
 
+concurrency:
+  group: jobs-feed-main
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -79,10 +83,8 @@ jobs:
           git add telegram_jobs_feed.xml telegram_jobs_content.xml telegram_jobs_design.xml telegram_jobs_marketing.xml telegram_jobs_other.xml telegram_jobs_crypto.xml telegram_jobs_100k.xml .rewrite_state.json
 
           git diff --cached --quiet && exit 0
-          git commit -m "chore: update RSS feeds"
 
-          # avoid race when main moved during workflow run
-          for i in 1 2 3; do
-            git pull --rebase origin main && git push origin main && break
-            sleep 3
-          done
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort && exit 1)
+          git commit -m "chore: update RSS feeds"
+          git push origin HEAD:main
