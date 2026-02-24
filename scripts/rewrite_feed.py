@@ -12,12 +12,22 @@ API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
 MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini").strip()
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 STATE_FILE = Path(".rewrite_state.json")
+REWRITE_VERSION = "v2"
 
 SYSTEM = (
-    "Ты редактор вакансий. Перепиши текст кратко и структурно для сайта. "
-    "Сохраняй факты 1:1: зарплаты, суммы, даты, контакты, ссылки. "
-    "Не выдумывай. Верни JSON: "
-    '{"title":"...","description":"..."}'
+    "Ты редактор вакансий для русскоязычного job-сайта. "
+    "Сохраняй факты строго 1:1: суммы, даты, города, форматы занятости, контакты, ссылки, @username. "
+    "Ничего не выдумывай и не добавляй. "
+    "Верни JSON с полями title и description. "
+    "title: короткий и информативный, до 95 символов. "
+    "description: 5 строк в таком порядке, каждая с новой строки: "
+    "1) Зарплата: ... "
+    "2) Формат: ... "
+    "3) Задачи: ... "
+    "4) Требования: ... "
+    "5) Контакты: ... "
+    "Если данных нет, пиши 'не указано'. "
+    "Не используй markdown, html и эмодзи."
 )
 
 
@@ -31,8 +41,32 @@ def save_state(state):
     STATE_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def clean_text(s: str) -> str:
-    return re.sub(r"\s+", " ", s).strip()
+def clean_title(s: str) -> str:
+    s = re.sub(r"\s+", " ", s).strip()
+    return s[:95] if len(s) > 95 else s
+
+
+def clean_description(s: str) -> str:
+    s = s.replace("\r", "\n")
+    lines = [re.sub(r"\s+", " ", ln).strip() for ln in s.split("\n")]
+    lines = [ln for ln in lines if ln]
+    if not lines:
+        return "Зарплата: не указано\nФормат: не указано\nЗадачи: не указано\nТребования: не указано\nКонтакты: не указано"
+
+    prefixes = ("Зарплата:", "Формат:", "Задачи:", "Требования:", "Контакты:")
+    normalized = []
+    for i, pfx in enumerate(prefixes):
+        if i < len(lines):
+            line = lines[i]
+            if not line.startswith(pfx):
+                if ":" in line:
+                    line = pfx + " " + line.split(":", 1)[1].strip()
+                else:
+                    line = f"{pfx} {line}"
+        else:
+            line = f"{pfx} не указано"
+        normalized.append(line)
+    return "\n".join(normalized)
 
 
 def call_or(raw_title: str, raw_desc: str):
@@ -61,8 +95,8 @@ def call_or(raw_title: str, raw_desc: str):
         body = json.loads(r.read().decode("utf-8"))
     content = body["choices"][0]["message"]["content"]
     obj = json.loads(content)
-    title = clean_text(obj.get("title") or raw_title)
-    desc = clean_text(obj.get("description") or raw_desc)
+    title = clean_title(obj.get("title") or raw_title)
+    desc = clean_description(obj.get("description") or raw_desc)
     return title, desc
 
 
@@ -89,7 +123,7 @@ def rewrite_file(path: str, state: dict, limit=30):
         if not raw_desc:
             continue
 
-        src_hash = hashlib.sha256((raw_title + "\n" + raw_desc).encode("utf-8")).hexdigest()
+        src_hash = hashlib.sha256((REWRITE_VERSION + "\n" + raw_title + "\n" + raw_desc).encode("utf-8")).hexdigest()
         key = link or hashlib.sha256(raw_title.encode("utf-8")).hexdigest()
 
         if state.get(key) == src_hash:
