@@ -99,6 +99,8 @@ def call_or(raw_title: str, raw_desc: str):
         headers={
             "Authorization": f"Bearer {API_KEY}",
             "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "jobs-feed-public/1.0 (+https://github.com/pereverzevart/jobs-feed-public)",
             "HTTP-Referer": "https://github.com/pereverzevart/jobs-feed-public",
             "X-Title": "jobs-feed-public",
         },
