@@ -4,13 +4,14 @@ import json
 import os
 import re
 import time
+import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 PROVIDER = os.getenv("REWRITE_PROVIDER", "").strip().lower()
-GROQ_API_KEY = re.sub(r"\s+", "", os.getenv("GROQ_API_KEY", ""))
-OPENROUTER_API_KEY = re.sub(r"\s+", "", os.getenv("OPENROUTER_API_KEY", ""))
+GROQ_API_KEY = re.sub(r"[\s\x00-\x1f]+", "", os.getenv("GROQ_API_KEY", ""))
+OPENROUTER_API_KEY = re.sub(r"[\s\x00-\x1f]+", "", os.getenv("OPENROUTER_API_KEY", ""))
 
 if not PROVIDER:
     PROVIDER = "groq" if GROQ_API_KEY else "openrouter"
@@ -112,6 +113,16 @@ def call_or(raw_title: str, raw_desc: str):
     return title, desc
 
 
+def format_error(e: Exception) -> str:
+    if isinstance(e, urllib.error.HTTPError):
+        detail = e.read().decode("utf-8", errors="replace")
+        detail = re.sub(r"\s+", " ", detail).strip()
+        if len(detail) > 500:
+            detail = detail[:500] + "..."
+        return f"HTTP {e.code}: {detail or e.reason}"
+    return str(e)
+
+
 def rewrite_file(path: str, state: dict, limit=30):
     tree = ET.parse(path)
     root = tree.getroot()
@@ -150,7 +161,7 @@ def rewrite_file(path: str, state: dict, limit=30):
             processed += 1
             time.sleep(0.35)
         except Exception as e:
-            print(f"[warn] {path}: {e}")
+            print(f"[warn] {path}: {format_error(e)}")
 
     tree.write(path, encoding="utf-8", xml_declaration=True)
     print(f"[ok] {path}: changed={changed}")
