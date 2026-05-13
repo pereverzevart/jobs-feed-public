@@ -68,8 +68,10 @@ jobs:
             --feed-description "Вакансии с зарплатой от 100 000 ₽ за последние 3 дня" \
             --output "telegram_jobs_100k.xml"
 
-      - name: Rewrite feeds (OpenRouter)
+      - name: Rewrite feeds
         env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENROUTER_MODEL: ${{ secrets.OPENROUTER_MODEL }}
         run: |

@@ -8,9 +8,21 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-API_KEY = re.sub(r"\s+", "", os.getenv("OPENROUTER_API_KEY", ""))
-MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini").strip()
-API_URL = "https://openrouter.ai/api/v1/chat/completions"
+PROVIDER = os.getenv("REWRITE_PROVIDER", "").strip().lower()
+GROQ_API_KEY = re.sub(r"\s+", "", os.getenv("GROQ_API_KEY", ""))
+OPENROUTER_API_KEY = re.sub(r"\s+", "", os.getenv("OPENROUTER_API_KEY", ""))
+
+if not PROVIDER:
+    PROVIDER = "groq" if GROQ_API_KEY else "openrouter"
+
+if PROVIDER == "groq":
+    API_KEY = GROQ_API_KEY
+    MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile").strip()
+    API_URL = "https://api.groq.com/openai/v1/chat/completions"
+else:
+    API_KEY = OPENROUTER_API_KEY
+    MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini").strip()
+    API_URL = "https://openrouter.ai/api/v1/chat/completions"
 STATE_FILE = Path(".rewrite_state.json")
 REWRITE_VERSION = "v2"
 
@@ -146,7 +158,7 @@ def rewrite_file(path: str, state: dict, limit=30):
 
 def main():
     if not API_KEY:
-        raise SystemExit("OPENROUTER_API_KEY missing")
+        raise SystemExit(f"{PROVIDER} API key missing")
 
     state = load_state()
 
