@@ -74,6 +74,8 @@ jobs:
           GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENROUTER_MODEL: ${{ secrets.OPENROUTER_MODEL }}
+          REWRITE_LIMIT: "4"
+          REWRITE_REQUEST_DELAY: "9"
         run: |
           python scripts/rewrite_feed.py
 
@@ -88,7 +90,9 @@ jobs:
           git commit -m "chore: update RSS feeds"
 
           # if main moved while workflow ran, rebase then push
+          pushed=0
           for i in 1 2 3; do
-            git pull --rebase origin main && git push origin HEAD:main && break
+            git pull --rebase origin main && git push origin HEAD:main && pushed=1 && break
             sleep 3
           done
+          test "$pushed" = "1"

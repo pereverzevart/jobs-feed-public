@@ -26,6 +26,8 @@ else:
     API_URL = "https://openrouter.ai/api/v1/chat/completions"
 STATE_FILE = Path(".rewrite_state.json")
 REWRITE_VERSION = "v2"
+REWRITE_LIMIT = int(os.getenv("REWRITE_LIMIT", "4"))
+REQUEST_DELAY = float(os.getenv("REWRITE_REQUEST_DELAY", "9" if PROVIDER == "groq" else "0.35"))
 
 SYSTEM = (
     "Ты редактор вакансий для русскоязычного job-сайта. "
@@ -110,6 +112,10 @@ def call_or(raw_title: str, raw_desc: str):
         body = json.loads(r.read().decode("utf-8"))
     content = body["choices"][0]["message"]["content"]
     obj = json.loads(content)
+    if isinstance(obj, list):
+        obj = obj[0] if obj and isinstance(obj[0], dict) else {}
+    if not isinstance(obj, dict):
+        obj = {}
     title = clean_title(obj.get("title") or raw_title)
     desc = clean_description(obj.get("description") or raw_desc)
     return title, desc
@@ -161,9 +167,9 @@ def rewrite_file(path: str, state: dict, limit=30):
             state[key] = src_hash
             changed += 1
             processed += 1
-            time.sleep(0.35)
         except Exception as e:
             print(f"[warn] {path}: {format_error(e)}")
+        time.sleep(REQUEST_DELAY)
 
     tree.write(path, encoding="utf-8", xml_declaration=True)
     print(f"[ok] {path}: changed={changed}")
@@ -181,7 +187,7 @@ def main():
         "telegram_jobs_100k.xml",
     ]:
         if Path(feed).exists():
-            rewrite_file(feed, state, limit=30)
+            rewrite_file(feed, state, limit=REWRITE_LIMIT)
 
     save_state(state)
 
