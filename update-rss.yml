@@ -22,12 +22,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Fetch script
-        run: |
-          mkdir -p scripts
-          curl -L "https://raw.githubusercontent.com/pereverzevart/financeanalitics/main/scripts/telegram_public_to_rss.py" -o scripts/telegram_public_to_rss.py
-          # t.me is unavailable to GitHub runners during the Telegram outage.
-          sed -i 's#https://t\.me/#https://telegram.me/#g' scripts/telegram_public_to_rss.py
+      - name: Use bundled Telegram parser
+        run: test -f scripts/telegram_public_to_rss.py
 
       - name: Generate main feed (3 days)
         run: |
