@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build RSS feeds from public Telegram channels via https://t.me/s/<channel>."""
+"""Build RSS feeds from public Telegram channels via https://telegram.me/s/<channel>."""
 
 from __future__ import annotations
 
@@ -166,7 +166,7 @@ def parse_args() -> argparse.Namespace:
 
 def normalize_channel(value: str) -> str:
     value = value.strip()
-    value = value.replace("https://t.me/", "", 1).replace("http://t.me/", "", 1)
+    value = value.replace("https://telegram.me/", "", 1).replace("http://t.me/", "", 1)
     value = value.removeprefix("s/").lstrip("@")
     if not value:
         raise ValueError("Empty channel value")
@@ -174,7 +174,7 @@ def normalize_channel(value: str) -> str:
 
 
 def build_public_url(channel: str, before: str | None = None) -> str:
-    base = f"https://t.me/s/{quote(channel)}"
+    base = f"https://telegram.me/s/{quote(channel)}"
     return f"{base}?before={quote(before)}" if before else base
 
 
@@ -262,7 +262,7 @@ def extract_messages(page_html: str) -> list[dict]:
                 "channel": channel,
                 "message_id": message_id,
                 "raw_text": text,
-                "url": f"https://t.me/{quote(channel)}/{message_id}",
+                "url": f"https://telegram.me/{quote(channel)}/{message_id}",
                 "dt": dt_obj,
             }
         )
@@ -341,7 +341,7 @@ def looks_truncated(text: str) -> bool:
 
 
 def fetch_full_message_text(channel: str, message_id: int) -> str | None:
-    full_url = f"https://t.me/{quote(channel)}/{message_id}"
+    full_url = f"https://telegram.me/{quote(channel)}/{message_id}"
     try:
         page_html = fetch_html(full_url)
     except RuntimeError:
