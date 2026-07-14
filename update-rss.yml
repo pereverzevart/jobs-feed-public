@@ -26,6 +26,8 @@ jobs:
         run: |
           mkdir -p scripts
           curl -L "https://raw.githubusercontent.com/pereverzevart/financeanalitics/main/scripts/telegram_public_to_rss.py" -o scripts/telegram_public_to_rss.py
+          # t.me is unavailable to GitHub runners during the Telegram outage.
+          sed -i 's#https://t\.me/#https://telegram.me/#g' scripts/telegram_public_to_rss.py
 
       - name: Generate main feed (3 days)
         run: |
@@ -79,6 +81,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-                    git add telegram_jobs_feed.xml telegram_jobs_content.xml telegram_jobs_design.xml telegram_jobs_marketing.xml telegram_jobs_other.xml telegram_jobs_crypto.xml telegram_jobs_100k.xml .rewrite_state.json
+          git add telegram_jobs_feed.xml telegram_jobs_content.xml telegram_jobs_design.xml telegram_jobs_marketing.xml telegram_jobs_other.xml telegram_jobs_crypto.xml telegram_jobs_100k.xml .rewrite_state.json
           git diff --cached --quiet || git commit -m "chore: update RSS feeds"
           git push
