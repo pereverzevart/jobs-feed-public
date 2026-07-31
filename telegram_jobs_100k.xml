@@ -4,18 +4,26 @@
     <title>Telegram Jobs Feed 100k+</title>
     <link>https://github.com/pereverzevart/jobs-feed-public</link>
     <description>Вакансии с зарплатой от 100 000 ₽ за последние 3 дня</description>
-    <lastBuildDate>Fri, 31 Jul 2026 11:30:24 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 31 Jul 2026 17:38:26 +0000</lastBuildDate>
     <item>
-      <title>DataOps Engineer, до 300 000 ₽, удалёнка, Москва</title>
+      <title>SMM / AI‑контент‑мейкер личного бренда (удалёнка, 130‑140k ₽)</title>
+      <link>https://telegram.me/theypaywell/6950</link>
+      <guid isPermaLink="true">https://telegram.me/theypaywell/6950</guid>
+      <pubDate>Fri, 31 Jul 2026 13:00:14 +0000</pubDate>
+      <category>content</category>
+      <description>Зарплата: от 130 000 до 140 000 ₽
+Формат: полностью удалённая работа, полная занятость
+Задачи: Разрабатывать и реализовывать контент‑стратегию для Instagram и Telegram; Создавать посты, Reels, Shorts и другой контент с использованием AI‑инструментов; Самостоятельно монтировать короткие вертикальные видео; Анализировать эффективность контента и развивать личный бренд; Искать и тестировать новые AI‑инструменты и форматы.
+Требования: Опыт в SMM или контент‑маркетинге от 2 лет; Практический опыт работы с AI‑инструментами (HeyGen, ElevenLabs и аналогами); Навыки создания short‑form‑видео полного цикла; Понимание развития личного бренда и органического роста в соцсетях; Самостоятельность и умение работать без микроменеджмента.
+Контакты: @theypaywell, t.me/theypaygood/smmaicontentmaker</description>
+    </item>
+    <item>
+      <title>Вакансия из @theypaywell</title>
       <link>https://telegram.me/theypaywell/6949</link>
       <guid isPermaLink="true">https://telegram.me/theypaywell/6949</guid>
       <pubDate>Fri, 31 Jul 2026 07:03:29 +0000</pubDate>
       <category>other</category>
-      <description>Зарплата: до 300 000 ₽
-Формат: удалёнка, гибридный
-Задачи: развивать и сопровождать инфраструктуру дата‑платформы; настраивать CI/CD, GitFlow и DataOps‑процессы; выводить lakehouse в промышленную эксплуатацию на Kubernetes; разворачивать мониторинг, резервное копирование и системы безопасности; управлять S3‑хранилищем, ролями доступа и эксплуатацией платформы; участвовать в миграции данных и развитии Data Platform.
-Требования: опыт эксплуатации Kubernetes в production; знание Docker, Python, SQL и Ansible; опыт работы с S3‑совместимыми хранилищами; навыки построения CI/CD и DataOps‑процессов; опыт работы с Grafana, Prometheus и Loki; Go, ClickHouse и опыт вывода lakehouse в production будут преимуществом.
-Контакты: t.me/theypaygood/dataopsengineer, @theypaywell</description>
+      <description>DataOps Engineer До 300 000 ₽ 〰️ удалёнка 〰️ Москва Что делать — Развивать и сопровождать инфраструктуру дата-платформы; — Настраивать CI/CD, GitFlow и DataOps-процессы; — Выводить lakehouse в промышленную эксплуатацию на Kubernetes; — Разворачивать мониторинг, резервное копирование и системы безопасности; — Управлять S3-хранилищем, ролями доступа и эксплуатацией платформы; — Участвовать в миграции данных и развитии Data Platform. Требования — Опыт эксплуатации Kubernetes в production; — Знание Docker, Python, SQL и Ansible; — Опыт работы с S3-совместимыми хранилищами; — Навыки построения CI/CD и DataOps-процессов; — Опыт работы с Grafana, Prometheus и Loki; — Go, ClickHouse и опыт вывода lakehouse в production будут преимуществом. Условия — Зарплата до 300 000 ₽; — Удалённый или гибридный формат работы; — Гибкое начало рабочего дня; — ДМС со стоматологией и страхованием жизни; — Корпоративное обучение и участие в профессиональных сообществах; — Подписка МТС Premium, спортзал и другие корпоративные бонусы. Откликнуться t.me/theypaygood/dataopsengineer Вакансии с ЗП выше 100 тысяч</description>
     </item>
   </channel>
 </rss>
