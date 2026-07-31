@@ -4,6 +4,18 @@
     <title>Telegram Jobs Feed 100k+</title>
     <link>https://github.com/pereverzevart/jobs-feed-public</link>
     <description>Вакансии с зарплатой от 100 000 ₽ за последние 3 дня</description>
-    <lastBuildDate>Thu, 30 Jul 2026 17:27:37 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 31 Jul 2026 11:30:24 +0000</lastBuildDate>
+    <item>
+      <title>DataOps Engineer, до 300 000 ₽, удалёнка, Москва</title>
+      <link>https://telegram.me/theypaywell/6949</link>
+      <guid isPermaLink="true">https://telegram.me/theypaywell/6949</guid>
+      <pubDate>Fri, 31 Jul 2026 07:03:29 +0000</pubDate>
+      <category>other</category>
+      <description>Зарплата: до 300 000 ₽
+Формат: удалёнка, гибридный
+Задачи: развивать и сопровождать инфраструктуру дата‑платформы; настраивать CI/CD, GitFlow и DataOps‑процессы; выводить lakehouse в промышленную эксплуатацию на Kubernetes; разворачивать мониторинг, резервное копирование и системы безопасности; управлять S3‑хранилищем, ролями доступа и эксплуатацией платформы; участвовать в миграции данных и развитии Data Platform.
+Требования: опыт эксплуатации Kubernetes в production; знание Docker, Python, SQL и Ansible; опыт работы с S3‑совместимыми хранилищами; навыки построения CI/CD и DataOps‑процессов; опыт работы с Grafana, Prometheus и Loki; Go, ClickHouse и опыт вывода lakehouse в production будут преимуществом.
+Контакты: t.me/theypaygood/dataopsengineer, @theypaywell</description>
+    </item>
   </channel>
 </rss>
