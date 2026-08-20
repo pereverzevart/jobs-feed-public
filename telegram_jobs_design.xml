@@ -4,7 +4,15 @@
     <title>Telegram Jobs Feed - design</title>
     <link>https://github.com/pereverzevart/jobs-feed-public</link>
     <description>Вакансии за последние 3 дня из Telegram</description>
-    <lastBuildDate>Wed, 19 Aug 2026 16:31:22 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 20 Aug 2026 09:34:20 +0000</lastBuildDate>
+    <item>
+      <title>Вакансия из @udafrii</title>
+      <link>https://telegram.me/udafrii/15277</link>
+      <guid isPermaLink="true">https://telegram.me/udafrii/15277</guid>
+      <pubDate>Wed, 19 Aug 2026 17:00:09 +0000</pubDate>
+      <category>design</category>
+      <description>​#вакансия #3dmotion #unrealengine #gamedev #remote 🎮 Lead / Senior 3D Motion Designer в GameGears.Online Игровая студия ищет сильного Unreal Engine-специалиста с перспективой лидерства. Задачи: — самостоятельно делать сложные рекламные 3D-креативы; — внедрять игровые механики; — руководить дизайнерами; — давать подробный feedback; — устранять блокеры; — улучшать production workflows; — внедрять AI в рабочий pipeline. 🌍 Полностью удалённо. 🕐 Full-time, 11:00–20:00 UTC+3. 📄 Контракт с зарубежной компанией. 💵 Выплаты в долларах/евро на зарубежный счёт. 🏖 22 рабочих дня отпуска. Контакт: ➡️ @korobkowave</description>
+    </item>
     <item>
       <title>Вакансия из @udafrii</title>
       <link>https://telegram.me/udafrii/15275</link>
@@ -116,14 +124,6 @@
       <pubDate>Mon, 17 Aug 2026 10:00:06 +0000</pubDate>
       <category>design</category>
       <description>​#вакансия #canva #дизайнер #удаленно 🎨 Дизайнер образовательных материалов в Canva Ищут специалиста на регулярный поток задач по готовым шаблонам. Задачи: — собирать страницы в Canva; — заменять готовые тексты и изображения; — адаптировать цвета, шрифты и расположение элементов; — генерировать изображения с помощью нейросетей по готовым промптам; — вносить правки. Что важно: — уверенная Canva; — внимательность; — аккуратность; — готовность к повторяющимся задачам. 🌍 Удалённо. ⏰ Свободный график. 📦 Стабильный поток задач с возможностью увеличивать объём. 💰 Бюджет — 75 000 ₽. Контакт: ➡️ исполнитель найден</description>
-    </item>
-    <item>
-      <title>Вакансия из @udafrii</title>
-      <link>https://telegram.me/udafrii/15251</link>
-      <guid isPermaLink="true">https://telegram.me/udafrii/15251</guid>
-      <pubDate>Sun, 16 Aug 2026 18:00:10 +0000</pubDate>
-      <category>design</category>
-      <description>​#вакансия #webdesign #figma #junior #удаленно 🎨 Junior Web Designer Digital-направление компании ищет начинающего веб-дизайнера. Коммерческий опыт не обязателен — готовы рассматривать сильные учебные и личные проекты. Задачи: — разрабатывать лендинги и отдельные страницы; — делать Desktop и Mobile-версии; — создавать прототипы в Figma; — работать с интерфейсами и UI-элементами; — делать рекламные баннеры и креативы; — дорабатывать существующие макеты. Что важно: — уверенная Figma; — композиция и визуальная иерархия; — основы UI/UX; — Auto Layout и Components; — внимательность. 🌍 Удалённо. 🕐 Около 4–5 часов в день по будням. 💰 50 000–70 000 ₽ на старте. 📈 Предусмотрен рост задач и дохода. Контакт: ➡️ @Denison_HR</description>
     </item>
   </channel>
 </rss>
