@@ -4,6 +4,18 @@
     <title>Telegram Jobs Feed 100k+</title>
     <link>https://github.com/pereverzevart/jobs-feed-public</link>
     <description>Вакансии с зарплатой от 100 000 ₽ за последние 3 дня</description>
-    <lastBuildDate>Wed, 28 Oct 2026 20:49:09 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Oct 2026 15:54:15 +0000</lastBuildDate>
+    <item>
+      <title>BI Developer – удалёнка, от 200 000 до 230 000 ₽</title>
+      <link>https://telegram.me/theypaywell/7133</link>
+      <guid isPermaLink="true">https://telegram.me/theypaywell/7133</guid>
+      <pubDate>Thu, 29 Oct 2026 08:17:15 +0000</pubDate>
+      <category>other</category>
+      <description>Зарплата: от 200 000 до 230 000 ₽ на руки
+Формат: удалёнка
+Задачи: Разрабатывать и оптимизировать SQL‑отчёты; проводить миграцию источников данных и анализировать зависимости отчётности; оптимизировать SQL‑запросы; проверять качество данных; тестировать отчёты; декомпозировать и оценивать задачи, поддерживать сервисы.
+Требования: Уверенное владение SQL (JOIN, CTE, оконные функции, агрегации); опыт разработки и оптимизации SQL‑отчётов; миграция источников данных и анализ зависимостей; понимание архитектуры DWH; проверка качества данных и тестирование отчётов; опыт работы с Jira и технической документацией.
+Контакты: t.me/theypaygood/bideveloper</description>
+    </item>
   </channel>
 </rss>
